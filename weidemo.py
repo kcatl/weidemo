@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/evn python2
 
 import weibo
 import urllib2, urllib, socket, cookielib, os
@@ -12,7 +12,7 @@ url = client.get_authorize_url()
 def make_access_token():   
     content = urllib2.urlopen(url, timeout=socket.setdefaulttimeout(2))
     if content:
-        #something to post
+#something to post
         '''Tips: What data you should post to Sina?
         1.There are only two parameters in Sina's Official API doc page, including
         client_id, redirect_uri(NOT redirect_url!!! See the differneces between url and uri...it must be an ERROR!)
@@ -74,5 +74,5 @@ def check_access_token():
         
 if __name__ == '__main__':
     check_access_token()
-    #now , we can get user's data
+#now , we can do something here.
     print len(client.statuses.user_timeline.get(screen_name="Kcatl").statuses)     
