@@ -1,4 +1,7 @@
-#/usr/bin/env python2
+#!/usr/bin/evn python2
+#License: GPL v3 or later
+#Author: Kcatl
+
 
 APP_KEY = ''
 APP_SECRET = ''

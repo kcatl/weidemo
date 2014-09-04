@@ -1,4 +1,6 @@
 #!/usr/bin/evn python2
+#License: GPL v3 or later
+#Author: Kcatl
 
 import weibo
 import urllib2, urllib, socket, cookielib, os
