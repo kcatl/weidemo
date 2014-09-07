@@ -11,7 +11,9 @@ You can use this demo to login Sina weibo automatically.
 your own APP_ID and APP_SECRET.
 >4. Run the weidemo.py , you will get some weibo status. that 
 means, you are authenticated to sina weibo.
+
 #What's Next?
+
 *I would try to write a python script, which can login in BAIDU,
  and TENCENT QZONE 
 * Dota2 open ID SDK, By learning weibo's Python SDK ,  I would like to write a Dota2 Open Id python SDK.
