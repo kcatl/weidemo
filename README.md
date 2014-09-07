@@ -14,7 +14,7 @@ means, you are authenticated to sina weibo.
 
 #What's Next?
 
-*I would try to write a python script, which can login in BAIDU,
+* I would try to write a python script, which can login in BAIDU,
  and TENCENT QZONE 
 * Dota2 open ID SDK, By learning weibo's Python SDK ,  I would like to write a Dota2 Open Id python SDK.
 this may take a little more time. cause I am Nude..in Python Programming...
