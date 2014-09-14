@@ -3,9 +3,9 @@
 #Author: Kcatl
 
 
-APP_KEY = '2303157745'
-APP_SECRET = '38bdccaba5ee5506cb96e5dbe2234096'
+APP_KEY = ''
+APP_SECRET = '3'
 APP_CALLBACK = 'https://api.weibo.com/oauth2/default.html'
 login_url = 'https://api.weibo.com/oauth2/authorize'
-USER_ID = '591064967@qq.com'
-USER_PASSWD = 'tmac16120'
+USER_ID = ''
+USER_PASSWD = ''
