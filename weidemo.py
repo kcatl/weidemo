@@ -3,7 +3,7 @@
 #Author: Kcatl
 
 import weibo
-import urllib2, urllib, socket, cookielib, os
+import urllib2, urllib, socket, cookielib, os, time
 from weibo import APIClient
 from conf.info import * 
 
@@ -77,4 +77,40 @@ def check_access_token():
 if __name__ == '__main__':
     check_access_token()
 #now , we can do something here.
-    print len(client.statuses.user_timeline.get(screen_name="Kcatl").statuses)     
+
+    MonthDict = {"Jan":1, "Feb":2, "Mar":3, "Apr":4, "May":5, "Jun":6, "Jul":7, "Aug":8, "Sep":9, "Oct":10, "Nov":11, "Dec":12}
+#init the dict struct
+    def initlist():
+        a = []
+        for i in range(12):
+            a.append({})
+            for n in range(24):
+                a[i][n] = 0
+                
+        return a
+    a = initlist()
+    
+
+    total_number = client.statuses.user_timeline.get().total_number
+
+    if total_number % 100 == 0:
+        i = 1
+    else:
+        i = 2
+    
+    for n in range(1, total_number / 100 + i):
+        pageStatus = client.statuses.user_timeline.get(count = 100, page = n)
+        if n == total_number / 100 + i - 1:
+            c = total_number % 100
+        else:
+            c = 100
+                
+        for s in range(0, c):
+            postTime = pageStatus.statuses[s].created_at
+            month = str(postTime.split()[2])
+            #x = MonthDict[month]
+            #y = str(postTime.split()[3].split(":")[0])
+            print postTime
+        time.sleep(2)
+            
+            
