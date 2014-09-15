@@ -3,7 +3,7 @@
 #Author: Kcatl
 
 import weibo
-import urllib2, urllib, socket, cookielib, os, time
+import urllib2, urllib, socket, cookielib, os, time, MySQLdb
 from weibo import APIClient
 from conf.info import * 
 
@@ -55,6 +55,9 @@ def make_access_token():
 filename = 'tokenfile.txt'
 filepath = os.path.dirname(__file__) + os.path.sep + 'conf'
 fileabspath = os.path.join(filepath, filename)
+dbname = 'userinfo.db'
+dbabspath = os.path.join(filepath, dbname)
+
 
 def save_access_token(access_token, expires_in):
     file = open(fileabspath, 'w')
@@ -98,19 +101,65 @@ if __name__ == '__main__':
     else:
         i = 2
     
-    for n in range(1, total_number / 100 + i):
-        pageStatus = client.statuses.user_timeline.get(count = 100, page = n)
-        if n == total_number / 100 + i - 1:
-            c = total_number % 100
-        else:
-            c = 100
-                
-        for s in range(0, c):
-            postTime = pageStatus.statuses[s].created_at
-            month = str(postTime.split()[2])
-            #x = MonthDict[month]
-            #y = str(postTime.split()[3].split(":")[0])
-            print postTime
-        time.sleep(2)
+    userid = client.account.get_uid.get().uid
+    name = client.users.show.get(uid = userid).screen_name
+    
+    
+    
+    
+    
+    
+    try:
+        conn = MySQLdb.connect(host = 'localhost', user = 'root', passwd = 'gentoo', db = 'weibo', port = 3306)
+        conn.select_db('weibo')
+        print "DB connected OK"
+    except e:
+        print "error: + e"
+        
+    def InsertUesrInfo(userid, name):
+        cur = conn.cursor()
+        cur.execute('insert into userinfo (userid, username) values(%s,%s)',(userid, name))
+        conn.commit()
+        cur.close()
+    def InsertUserData():
+        cur = conn.cursor()
+      
+        for n in range(1, total_number / 100 + i):
+            pageStatus = client.statuses.user_timeline.get(count = 100, page = n)
+            if n == total_number / 100 + i - 1:
+                c = total_number % 100
+            else:
+                c = 100
+                 
+            for s in range(0, c):
+                postTime = pageStatus.statuses[s].created_at
+                month = str(postTime.split()[1])
+                monthValue = MonthDict[month]
+                hourValue = str(postTime.split()[3].split(":")[0])
+                yearValue = str(postTime.split()[5])
+                print monthValue, hourValue, yearValue
+                try:
+                    cur.execute('insert into userdata (month,hour,year,userid) values (%s,%s,%s,%s)', (monthValue,hourValue,yearValue,userid))
+                    print "insert OK"    
+                except:
+                    print "eeee + e"            
+            time.sleep(1)
+        conn.commit()
+        cur.close()
+        
+        print "Finished DB insert job"
+        
+    try:
+        InsertUesrInfo(userid, name)
+        print "isnert into userinfo success"
+        InsertUserData()
+        print "insert into userdata success"
+    except:
+        print "User info or data insert failed"
+    finally:
+        conn.close()
+            
+       
+
             
             
