@@ -134,7 +134,23 @@ if __name__ == '__main__':
              
         #get database cursor and insert into userinfo table
         cur = conn.cursor()
-        cur.execute('insert into userinfo (username,province,city,location,description,profile_image_url,gender,followers_count,friends_count,statuses_count,favourites_count,created_at,geo_enabled,verified,verified_reason,url,userid) values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(username,province,city,location,description,profile_image_url, gender,followers_count,friends_count,statuses_count,favourites_count,created_at,geo_enabled,verified,verified_reason,url, userid))
+        cur.execute('insert into userinfo (username,\
+        province,\
+        city,\
+        location,\
+        description,\
+        profile_image_url,\
+        gender,\
+        followers_count,\
+        friends_count,\
+        statuses_count,\
+        favourites_count,\
+        created_at,\
+        geo_enabled,\
+        verified,\
+        verified_reason,\
+        url,\
+        userid) values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(username,province,city,location,description,profile_image_url, gender,followers_count,friends_count,statuses_count,favourites_count,created_at,geo_enabled,verified,verified_reason,url, userid))
         conn.commit()
         cur.close()
     def InsertUserData():
