@@ -112,7 +112,8 @@ if __name__ == '__main__':
         except e:
             print "Error on DB connection"
         return conn
-    conn = DBconnector()    
+    conn = DBconnector()
+    '''
     def InsertUesrInfo(userid):
         #user insert params
         user = client.users.show.get(uid = userid)
@@ -172,7 +173,7 @@ if __name__ == '__main__':
                 yearValue = str(postTime.split()[5])
                 
                 try:
-                    cur.execute('insert into userdata (month,hour,year,userid) values (%s,%s,%s,%s)', (monthValue,hourValue,yearValue,userid))
+                    cur.execute('insert into userdata (month,hour,year) values (%s,%s,%s)', (monthValue,hourValue,yearValue))
                     #print monthValue, hourValue, yearValue + " insert OK"    
                 except:
                     print "eeee + e"            
@@ -200,13 +201,33 @@ if __name__ == '__main__':
         conn.close()
         print "all job finished"
         
-        
+ '''       
 #get the heat map data
-    try:
-        getconn = DBconnector()
-        print "Database connected OK (get data)"
-    except:
-        print "Database connection failed for getting data"
+    def getData():
+        
+        data = []
+        try:
+            getconn = DBconnector()
+            print "Database connected OK (get data)"
+            getcur = getconn.cursor()
+            getcur.execute('select year from userdata group by year order by year')
+            years = getcur.fetchall()
+            for y in years:
+                sql = "select month from userdata where year = "+str(y[0])+" group by month order by month"
+                getcur.execute(sql)
+                for m in getcur.fetchall():
+                    sql = "select hour from userdata where year= " + str(y[0]) + " and month = " + str(m[0]) + " group by hour order by hour"  
+                    getcur.execute(sql)
+                    for h in getcur.fetchall():
+                        sql = "select count(*) from userdata where year= " + str(y[0]) + " and month = " + str(m[0]) + " and hour = " + str(h[0])   
+                        getcur.execute(sql)
+                        r = getcur.fetchone()
+                        data.append([str(y[0]) + str(m[0]), str(h[0]), str(r[0])])
+    
+        except:
+            print "Database connection failed for getting data"
+        return data
+    
     
             
 
