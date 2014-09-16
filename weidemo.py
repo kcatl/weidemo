@@ -102,23 +102,39 @@ if __name__ == '__main__':
         i = 2
     
     userid = client.account.get_uid.get().uid
-    name = client.users.show.get(uid = userid).screen_name
-    
-    
-    
-    
-    
-    
+   
+
+
     try:
         conn = MySQLdb.connect(host = 'localhost', user = 'root', passwd = 'gentoo', db = 'weibo', port = 3306)
         conn.select_db('weibo')
         print "DB connected OK"
     except e:
-        print "error: + e"
+        print "Error on DB connection"
         
-    def InsertUesrInfo(userid, name):
+    def InsertUesrInfo(userid):
+        #user insert params
+        user = client.users.show.get(uid = userid)
+        username = user.screen_name
+        province = user.province
+        city = user.city
+        location = user.location
+        description = user.description
+        profile_image_url = user.profile_image_url
+        gender = user.gender
+        followers_count = user.followers_count
+        friends_count = user.friends_count
+        statuses_count = user.statuses_count
+        favourites_count = user.favourites_count
+        created_at = user.created_at
+        geo_enabled = user.geo_enabled
+        verified = user.verified
+        verified_reason = user.verified_reason
+        url = user.url
+             
+        #get database cursor and insert into userinfo table
         cur = conn.cursor()
-        cur.execute('insert into userinfo (userid, username) values(%s,%s)',(userid, name))
+        cur.execute('insert into userinfo (username,province,city,location,description,profile_image_url,gender,followers_count,friends_count,statuses_count,favourites_count,created_at,geo_enabled,verified,verified_reason,url,userid) values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(username,province,city,location,description,profile_image_url, gender,followers_count,friends_count,statuses_count,favourites_count,created_at,geo_enabled,verified,verified_reason,url, userid))
         conn.commit()
         cur.close()
     def InsertUserData():
@@ -137,29 +153,38 @@ if __name__ == '__main__':
                 monthValue = MonthDict[month]
                 hourValue = str(postTime.split()[3].split(":")[0])
                 yearValue = str(postTime.split()[5])
-                print monthValue, hourValue, yearValue
+                
                 try:
                     cur.execute('insert into userdata (month,hour,year,userid) values (%s,%s,%s,%s)', (monthValue,hourValue,yearValue,userid))
-                    print "insert OK"    
+                    #print monthValue, hourValue, yearValue + " insert OK"    
                 except:
                     print "eeee + e"            
             time.sleep(1)
         conn.commit()
         cur.close()
-        
-        print "Finished DB insert job"
-        
+    
+    
     try:
-        InsertUesrInfo(userid, name)
-        print "isnert into userinfo success"
-        InsertUserData()
-        print "insert into userdata success"
+        
+        try:
+            InsertUesrInfo(userid)
+            print "isnert into userinfo success"
+            
+        except:
+            print "User info insert failed"
+        try:
+            InsertUserData()
+            print "insert into userdata success"
+        except:
+            print "User data insert failed"
     except:
-        print "User info or data insert failed"
+        print "insert job error"
     finally:
         conn.close()
+        print "all job finished"
+    
             
-       
+
 
             
             
