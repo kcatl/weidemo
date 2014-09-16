@@ -27,9 +27,8 @@ create table userinfo( id bigint primary key auto_increment,
 #create table userdata
 
 create table userdata(
-	userid bigint null,
+	id bigint primary key auto_increment,
 	year int null,
 	month int null,
-	hour int null,
-	datanum bigint unique key auto_increment
+	hour int null
 );

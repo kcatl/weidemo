@@ -104,14 +104,15 @@ if __name__ == '__main__':
     userid = client.account.get_uid.get().uid
    
 
-
-    try:
-        conn = MySQLdb.connect(host = 'localhost', user = 'root', passwd = 'gentoo', db = 'weibo', port = 3306)
-        conn.select_db('weibo')
-        print "DB connected OK"
-    except e:
-        print "Error on DB connection"
-        
+    def DBconnector():
+        try:
+            conn = MySQLdb.connect(host = 'localhost', user = 'root', passwd = 'gentoo', db = 'weibo', port = 3306)
+            conn.select_db('weibo')
+            print "DB connected OK"
+        except e:
+            print "Error on DB connection"
+        return conn
+    conn = DBconnector()    
     def InsertUesrInfo(userid):
         #user insert params
         user = client.users.show.get(uid = userid)
@@ -198,6 +199,14 @@ if __name__ == '__main__':
     finally:
         conn.close()
         print "all job finished"
+        
+        
+#get the heat map data
+    try:
+        getconn = DBconnector()
+        print "Database connected OK (get data)"
+    except:
+        print "Database connection failed for getting data"
     
             
 
