@@ -30,5 +30,5 @@ create table userdata(
 	id bigint primary key auto_increment,
 	year int null,
 	month int null,
-	hour int null
+	day int null
 );

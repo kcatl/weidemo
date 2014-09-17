@@ -77,160 +77,149 @@ def check_access_token():
     except:
         make_access_token()
         
-if __name__ == '__main__':
-    check_access_token()
+
+check_access_token()
 #now , we can do something here.
 
-    MonthDict = {"Jan":1, "Feb":2, "Mar":3, "Apr":4, "May":5, "Jun":6, "Jul":7, "Aug":8, "Sep":9, "Oct":10, "Nov":11, "Dec":12}
-#init the dict struct
-    def initlist():
-        a = []
-        for i in range(12):
-            a.append({})
-            for n in range(24):
-                a[i][n] = 0
-                
-        return a
-    a = initlist()
-    
+MonthDict = {"Jan":1, "Feb":2, "Mar":3, "Apr":4, "May":5, "Jun":6, "Jul":7, "Aug":8, "Sep":9, "Oct":10, "Nov":11, "Dec":12}
 
-    total_number = client.statuses.user_timeline.get().total_number
 
-    if total_number % 100 == 0:
-        i = 1
-    else:
-        i = 2
+
+total_number = client.statuses.user_timeline.get().total_number
+
+if total_number % 100 == 0:
+    i = 1
+else:
     
-    userid = client.account.get_uid.get().uid
+    i = 2
+
+userid = client.account.get_uid.get().uid
    
 
-    def DBconnector():
-        try:
-            conn = MySQLdb.connect(host = 'localhost', user = 'root', passwd = 'gentoo', db = 'weibo', port = 3306)
-            conn.select_db('weibo')
-            print "DB connected OK"
-        except e:
-            print "Error on DB connection"
-        return conn
-    conn = DBconnector()
-    '''
-    def InsertUesrInfo(userid):
-        #user insert params
-        user = client.users.show.get(uid = userid)
-        username = user.screen_name
-        province = user.province
-        city = user.city
-        location = user.location
-        description = user.description
-        profile_image_url = user.profile_image_url
-        gender = user.gender
-        followers_count = user.followers_count
-        friends_count = user.friends_count
-        statuses_count = user.statuses_count
-        favourites_count = user.favourites_count
-        created_at = user.created_at
-        geo_enabled = user.geo_enabled
-        verified = user.verified
-        verified_reason = user.verified_reason
-        url = user.url
-             
-        #get database cursor and insert into userinfo table
-        cur = conn.cursor()
-        cur.execute('insert into userinfo (username,\
-        province,\
-        city,\
-        location,\
-        description,\
-        profile_image_url,\
-        gender,\
-        followers_count,\
-        friends_count,\
-        statuses_count,\
-        favourites_count,\
-        created_at,\
-        geo_enabled,\
-        verified,\
-        verified_reason,\
-        url,\
-        userid) values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(username,province,city,location,description,profile_image_url, gender,followers_count,friends_count,statuses_count,favourites_count,created_at,geo_enabled,verified,verified_reason,url, userid))
-        conn.commit()
-        cur.close()
-    def InsertUserData():
-        cur = conn.cursor()
-      
-        for n in range(1, total_number / 100 + i):
-            pageStatus = client.statuses.user_timeline.get(count = 100, page = n)
-            if n == total_number / 100 + i - 1:
-                c = total_number % 100
-            else:
-                c = 100
-                 
-            for s in range(0, c):
-                postTime = pageStatus.statuses[s].created_at
-                month = str(postTime.split()[1])
-                monthValue = MonthDict[month]
-                hourValue = str(postTime.split()[3].split(":")[0])
-                yearValue = str(postTime.split()[5])
-                
-                try:
-                    cur.execute('insert into userdata (month,hour,year) values (%s,%s,%s)', (monthValue,hourValue,yearValue))
-                    #print monthValue, hourValue, yearValue + " insert OK"    
-                except:
-                    print "eeee + e"            
-            time.sleep(1)
-        conn.commit()
-        cur.close()
+def DBconnector():
+    try:
+        conn = MySQLdb.connect(host = 'localhost', user = 'root', passwd = 'gentoo', db = 'weibo', port = 3306)
+        conn.select_db('weibo')
+        print "DB connected OK"
+    except e:
+        print "Error on DB connection"
+    return conn
+conn = DBconnector()
     
+def InsertUesrInfo(userid):
+    #user insert params
+    user = client.users.show.get(uid = userid)
+    username = user.screen_name
+    province = user.province
+    city = user.city
+    location = user.location
+    description = user.description
+    profile_image_url = user.profile_image_url
+    gender = user.gender
+    followers_count = user.followers_count
+    friends_count = user.friends_count
+    statuses_count = user.statuses_count
+    favourites_count = user.favourites_count
+    created_at = user.created_at
+    geo_enabled = user.geo_enabled
+    verified = user.verified
+    verified_reason = user.verified_reason
+    url = user.url
+         
+    #get database cursor and insert into userinfo table
+    cur = conn.cursor()
+    cur.execute('insert into userinfo (username,\
+    province,\
+    city,\
+    location,\
+    description,\
+    profile_image_url,\
+    gender,\
+    followers_count,\
+    friends_count,\
+    statuses_count,\
+    favourites_count,\
+    created_at,\
+    geo_enabled,\
+    verified,\
+    verified_reason,\
+    url,\
+    userid) values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(username,province,city,location,description,profile_image_url, gender,followers_count,friends_count,statuses_count,favourites_count,created_at,geo_enabled,verified,verified_reason,url, userid))
+    conn.commit()
+    cur.close()
+def InsertUserData():
+    cur = conn.cursor()
+  
+    for n in range(1, total_number / 100 + i):
+        pageStatus = client.statuses.user_timeline.get(count = 100, page = n)
+        if n == total_number / 100 + i - 1:
+            c = total_number % 100
+        else:
+            c = 100
+             
+        for s in range(0, c):
+            postTime = pageStatus.statuses[s].created_at
+            
+            month = str(postTime.split()[1])
+            monthValue = MonthDict[month]
+            dayValue = str(postTime.split()[2])
+            yearValue = str(postTime.split()[5])
+            
+            try:
+                cur.execute('insert into userdata (month,day,year) values (%s,%s,%s)', (monthValue, dayValue,yearValue))
+                #print monthValue, dayValue, yearValue + " insert OK"    
+            except:
+                print "eeee + e"
+        time.sleep(1)
+    conn.commit()
+    cur.close()
+  
+'''
+try:
     
     try:
+        InsertUesrInfo(userid)
+        print "isnert into userinfo success"
         
-        try:
-            InsertUesrInfo(userid)
-            print "isnert into userinfo success"
-            
-        except:
-            print "User info insert failed"
-        try:
-            InsertUserData()
-            print "insert into userdata success"
-        except:
-            print "User data insert failed"
     except:
-        print "insert job error"
-    finally:
-        conn.close()
-        print "all job finished"
-        
- '''       
+        print "User info insert failed"
+    try:
+        InsertUserData()
+        print "insert into userdata success"
+    except:
+        print "User data insert failed"
+except:
+    print "insert job error"
+finally:
+    conn.close()
+    print "all job finished"
+'''       
+      
 #get the heat map data
-    def getData():
-        
-        data = []
-        try:
-            getconn = DBconnector()
-            print "Database connected OK (get data)"
-            getcur = getconn.cursor()
-            getcur.execute('select year from userdata group by year order by year')
-            years = getcur.fetchall()
-            for y in years:
-                sql = "select month from userdata where year = "+str(y[0])+" group by month order by month"
+def getData():
+    
+    data = []
+    try:
+        getconn = DBconnector()
+        print "Database connected OK (get data)"
+        getcur = getconn.cursor()
+        getcur.execute('select year from userdata group by year order by year')
+        years = getcur.fetchall()
+        for y in years:
+            sql = "select month from userdata where year = "+str(y[0])+" group by month order by month"
+            getcur.execute(sql)
+            for m in getcur.fetchall():
+                sql = "select day from userdata where year= " + str(y[0]) + " and month = " + str(m[0]) + " group by day order by day"  
                 getcur.execute(sql)
-                for m in getcur.fetchall():
-                    sql = "select hour from userdata where year= " + str(y[0]) + " and month = " + str(m[0]) + " group by hour order by hour"  
+                for d in getcur.fetchall():
+                    sql = "select count(*) from userdata where year= " + str(y[0]) + " and month = " + str(m[0]) + " and day = " + str(d[0])   
                     getcur.execute(sql)
-                    for h in getcur.fetchall():
-                        sql = "select count(*) from userdata where year= " + str(y[0]) + " and month = " + str(m[0]) + " and hour = " + str(h[0])   
-                        getcur.execute(sql)
-                        r = getcur.fetchone()
-                        data.append([str(y[0]) + str(m[0]), str(h[0]), str(r[0])])
-    
-        except:
-            print "Database connection failed for getting data"
-        return data
-    
-    
-            
+                    r = getcur.fetchone()
+                    data.append((int(y[0]), int(m[0]), int(d[0]), int(r[0]) ))
+                      
 
+    except:
+        print "Database connection failed for getting data"
+    return data
 
-            
-            
+           
