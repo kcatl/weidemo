@@ -17,7 +17,7 @@ def make_access_token():
 #something to post
         '''Tips: What data you should post to Sina?
         1.There are only two parameters in Sina's Official API doc page, including
-        client_id, redirect_uri(NOT redirect_url!!! See the differneces between url and uri...it must be an ERROR!)
+        client_id, redirect_uri(NOT redirect_url)
         2.Some information about the login user, including userId and passwd
         3.You can get this parameter from Web browser hack, 'action' is the only one we need.
         4.The last one is headers, you should make sure 'Referer' in your headers
